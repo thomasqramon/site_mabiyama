@@ -108,7 +108,29 @@ $('chips').onclick=e=>{const b=e.target.closest('button');if(!b)return;pf=+b.dat
 ['min','q'].forEach(i=>$(i).oninput=draw);
 $('sl').oninput=()=>go(+$('sl').value);$('prev').onclick=()=>go(d-1);$('next').onclick=()=>go(d+1);
 function go(i){d=Math.max(0,Math.min(nd-1,i));draw()}
-function why(a,m,p){const r=[],e=D.E[a][m*NP+p],z=D.Z[a][m*NP+p],t=D.T[a][m*NP+p];
+function why(a,m,p){
+    const i=m*NP+p;
+
+    const e=D.E?.[a]?.[i] ?? 0;
+    const z=D.Z?.[a]?.[i] ?? 0;
+    const t=D.T?.[a]?.[i];
+
+    const r=[];
+
+    if(e>0)
+        r.push(`${e} erros do tipo ${EC[p]} nas últimas 24 h`);
+
+    if(z>=10)
+        r.push(`${SN[p]} ${dc(z)} desvios`);
+
+    if(t!==undefined)
+        r.push(`${t} dias desde a última falha desta peça`);
+
+    if(r.length===0)
+        r.push('Dados complementares de diagnóstico indisponíveis');
+
+    return r.join(' · ');
+}
  if(e>0)r.push(`${e} erro${e>1?'s':''} do tipo ${EC[p]} nas últimas 24 h`);
  if(z>=10)r.push(`${SN[p]} ${dc(z)} desvios ${p==2?'abaixo':'acima'} do normal da máquina`);
  r.push(`${t} dias desde a última falha desta peça`);return r.join(' · ')}
